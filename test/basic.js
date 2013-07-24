@@ -1,4 +1,4 @@
-/*global describe:true it:true*/
+/*global describe:true, it:true*/
 "use strict";
 
 var yiewd = require('../lib/yiewd.js');

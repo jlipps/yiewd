@@ -5,5 +5,5 @@
   "unused": true,
   "trailing": true,
   "node": true,
-  "es5": true
+  "esnext": true
 }
