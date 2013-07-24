@@ -1,0 +1,46 @@
+{
+  "name": "yiewd",
+  "description": "Generator-based WebDriver client, wrapper around Wd.js",
+  "tags": [
+    "automation",
+    "javascript",
+    "webdriver",
+    "selenium",
+    "wd"
+  ],
+  "version": "0.0.1",
+  "author": "jlipps@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jlipps/yiewd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jlipps/yiewd/issues"
+  },
+  "engines": [
+    "node"
+  ],
+  "main": "./lib/yiewd.js",
+  "directories": {
+    "lib": "./lib",
+  },
+  "dependencies": {
+    "underscore": "~1.4.3",
+    "wd": "~0.0.32"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "mocha": "~1.8.1",
+    "grunt": "~0.4.0",
+    "grunt-cli": "~0.1.6",
+    "should": "~1.2.1",
+    "grunt-mocha-test": "~0.2.0",
+    "grunt-contrib-jshint": "~0.1.1",
+    "saucelabs": "~0.0.7",
+    "socket.io-client": "~0.9.11",
+    "socks": "~0.0.1"
+  }
+}
+
