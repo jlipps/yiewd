@@ -127,4 +127,12 @@ describe('yiewd', function() {
       done();
     });
   });
+
+  it('should work passing in host and port', function(done) {
+    yiewd.remote('localhost', 4444, function*() {
+      yield this.init(caps);
+      yield this.quit();
+      done();
+    });
+  });
 });
