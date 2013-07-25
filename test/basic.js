@@ -106,6 +106,16 @@ describe('yiewd', function() {
     });
   });
 
+  it('should sleep', function(done) {
+    driver.run(function*() {
+      var begin = Date.now();
+      yield this.sleep(0.5);
+      var end = Date.now();
+      (end - begin).should.be.above(499);
+      done();
+    });
+  });
+
   it('should work with run bound to `this`', function(done) {
     driver.run(function*() {
       (yield this.title()).should.equal('Test Page');

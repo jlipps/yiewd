@@ -8,7 +8,7 @@
     "selenium",
     "wd"
   ],
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "jlipps@gmail.com",
   "repository": {
     "type": "git",

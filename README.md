@@ -21,14 +21,16 @@ driver.init(desiredCaps, function(err, sessionId) {
       if (err) return postTest(err);
       el.click(function(err) {
         if (err) return postTest(err);
-        driver.elementById("anotherThing", function(err, el2) {
-          if (err) return postTest(err);
-          el2.text(function(err, text) {
+        setTimeout(function() {
+          driver.elementById("anotherThing", function(err, el2) {
             if (err) return postTest(err);
-            text.should.equal("What the text should be");
-            driver.quit(postTest);
+            el2.text(function(err, text) {
+              if (err) return postTest(err);
+              text.should.equal("What the text should be");
+              driver.quit(postTest);
+            });
           });
-        });
+        }, 1500);
       });
     });
   });
@@ -51,6 +53,7 @@ wd.remote(function*(driver) {
   yield driver.get("http://mysite.com");
   el = yield driver.elementById("someId");
   yield el.click();
+  yield driver.sleep(1.5);
   el2 = yield driver.elementById("anotherThing")
   text = yield el2.text();
   text.should.equal("What the text should be");
@@ -68,6 +71,7 @@ wd.remote(function*() {
   yield this.get("http://mysite.com");
   el = yield this.elementById("someId");
   yield el.click();
+  yield this.sleep(1.5);
   el2 = yield this.elementById("anotherThing")
   text = yield el2.text();
   text.should.equal("What the text should be");
