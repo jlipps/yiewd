@@ -7,7 +7,6 @@ var yiewd = require('../lib/yiewd.js')
   , should = require('should');
 
 describe('yiewd', function() {
-
   // handle running test server
   var server = new Express();
   var baseUrl = 'http://127.0.0.1:8181/'
