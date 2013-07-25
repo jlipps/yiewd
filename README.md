@@ -135,6 +135,24 @@ Essentially, if you have a `driver` object originally passed into the generator
 argument to `yiewd.remote()`, you can use `driver.run()` and pass it another
 generator which will take over execution for the driver. Easy!
 
+Integrating with Sauce Labs
+---------------------------
+We've got some special sauce so you can sauce while you Sauce:
+
+```js
+yiewd.sauce(userName, accessKey, function*() {
+  yield this.init(desiredCaps);
+  yield this.get('http://saucelabs.com/guinea-pig/');
+  try {
+    var title = yield this.title();
+    title.should.include("I am a page title");
+    yield this.reportPass();
+  } catch (e) {
+    yield this.reportFail();
+  }
+});
+```
+
 Requirements
 ------------
 * Node &gt;= 0.11.3 (one with generators)
