@@ -22,7 +22,7 @@
   ],
   "main": "./lib/yiewd.js",
   "directories": {
-    "lib": "./lib",
+    "lib": "./lib"
   },
   "dependencies": {
     "underscore": "~1.4.3",
@@ -32,6 +32,7 @@
     "test": "grunt test"
   },
   "devDependencies": {
+    "express": "~3.3.4",
     "mocha": "~1.8.1",
     "grunt": "~0.4.0",
     "grunt-cli": "~0.1.6",
@@ -43,4 +44,3 @@
     "socks": "~0.0.1"
   }
 }
-
