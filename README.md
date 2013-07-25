@@ -72,12 +72,57 @@ It takes a slight change of thought, but it's so much better than callbacks.
 
 Enjoy!
 
+Integrating with test suites
+----------------------------
+
+It's relatively easy to break up bits of sessions between testcases and so on. Here's what a simple mocha test suite could look like:
+
+```js
+describe('my cool feature', function() {
+  var driver = null;  // driver object used across testcases
+
+  // global setUp, tearDown
+  before(function(done) {
+    yiewd.remote(function*(d) {
+      driver = d;
+      yield driver.init(desiredCaps);
+      done();
+    });
+  });
+  after(function(done) {
+    driver.run(function*() {
+      yield driver.quit();
+      done();
+    });
+  });
+
+  it('should do some thing', function(done) {
+    driver.run(function*() {
+      // test logic
+      done();
+    });
+  });
+
+  it('should do another thing', function(done) {
+    driver.run(function*() {
+      // test logic
+      done();
+    });
+  });
+});
+```
+
+Essentially, if you have a `driver` object originally passed into the generator
+argument to `yiewd.remote()`, you can use `driver.run()` and pass it another
+generator which will take over execution for the driver. Easy!
+
 Requirements
 ------------
 * Node &gt;= 0.11.3 (one with generators)
-* Make sure you start your test runner with the `--harmony` flag
+* Make sure you start your test runner with the `--harmony` flag; this might
+  be non-trivial but for mocha, see below.
 
-Tests
+Run the Tests
 -----
 Make sure you have your chromedriver-enabled Selenium server running, then:
 
