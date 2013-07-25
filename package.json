@@ -8,7 +8,7 @@
     "selenium",
     "wd"
   ],
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "jlipps@gmail.com",
   "repository": {
     "type": "git",
@@ -26,7 +26,8 @@
   },
   "dependencies": {
     "underscore": "~1.4.3",
-    "wd": "~0.0.32"
+    "wd": "~0.0.32",
+    "saucelabs": "~0.0.7"
   },
   "scripts": {
     "test": "grunt test"
@@ -38,7 +39,6 @@
     "grunt-cli": "~0.1.6",
     "should": "~1.2.1",
     "grunt-mocha-test": "~0.2.0",
-    "grunt-contrib-jshint": "~0.1.1",
-    "saucelabs": "~0.0.7"
+    "grunt-contrib-jshint": "~0.1.1"
   }
 }
