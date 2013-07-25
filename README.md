@@ -1,9 +1,9 @@
-yiewd
+Yiewd
 =====
 
-A [Wd.js](https://github.com/admc/wd) wrapper that uses V8's new generators for
-cleaner code! It's called `yiewd` because it uses the new `yield` syntax with
-`wd`. `yield` + `wd` = `yiewd`. Right?
+Yiewd is a [Wd.js](https://github.com/admc/wd) wrapper that uses V8's new
+generators for cleaner code! It's called `yiewd` because it uses the new
+`yield` syntax with `wd`. `yield` + `wd` = `yiewd`. Amazing, right?
 
 The problem
 -----------
@@ -129,3 +129,15 @@ Make sure you have your chromedriver-enabled Selenium server running, then:
 ```
 mocha -R spec -t 60000 --harmony test/
 ```
+
+Architecture
+------------
+This is a simple wrapper around Wd.js that is really easy to maintain: (a) new
+methods from Wd.js can be added with one word in Yiewd, (b) there's nothing
+really to maintain beyond the generator glue which should stabilize quickly.
+
+Contributing
+------------
+Give it a whirl and contribute bugfixes! Pull requests welcome. Biggest area of
+need right now is filling out our testsuite to make sure everything works
+correctly.
