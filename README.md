@@ -156,3 +156,10 @@ Contributing
 Give it a whirl and contribute bugfixes! Pull requests welcome. Biggest area of
 need right now is filling out our testsuite to make sure everything works
 correctly.
+
+Acknowledgements
+----------------
+These articles / code samples helped me get started with generators (no code
+was reused, however):
+* [http://wingolog.org/archives/2013/05/08/generators-in-v8](http://wingolog.org/archives/2013/05/08/generators-in-v8)
+* [https://github.com/kriskowal/q/tree/master/examples/async-generators](https://github.com/kriskowal/q/tree/master/examples/async-generators)
