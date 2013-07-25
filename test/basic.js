@@ -106,9 +106,24 @@ describe('yiewd', function() {
     });
   });
 
+  it('should work with run bound to `this`', function(done) {
+    driver.run(function*() {
+      (yield this.title()).should.equal('Test Page');
+      done();
+    });
+  });
+
   it('should stop a session', function(done) {
     driver.run(function*() {
       yield driver.quit();
+      done();
+    });
+  });
+
+  it('should work with functions bound to `this`', function(done) {
+    yiewd.remote(function*() {
+      yield this.init(caps);
+      yield this.quit();
       done();
     });
   });

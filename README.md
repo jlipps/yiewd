@@ -58,7 +58,22 @@ wd.remote(function*(driver) {
 });
 ```
 
-Isn't that awesome?
+Isn't that awesome? If you don't like passing `driver` around, you can also
+make use of Javascript's awesome binding situation to be even more concise:
+
+```js
+wd.remote(function*() {
+  var sessionId, el, el2, text;
+  sessionId = yield this.init(desiredCaps);
+  yield this.get("http://mysite.com");
+  el = this.elementById("someId");
+  yield el.click();
+  el2 = this.elementById("anotherThing")
+  text = yield el2.text();
+  text.should.equal("What the text should be");
+  yield this.quit();
+});
+```
 
 How it works
 ------------
