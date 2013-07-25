@@ -1,7 +1,9 @@
 yiewd
 =====
 
-A [Wd.js](https://github.com/admc/wd) wrapper that uses V8's new generators for cleaner code!
+A [Wd.js](https://github.com/admc/wd) wrapper that uses V8's new generators for
+cleaner code! It's called `yiewd` because it uses the new `yield` syntax with
+`wd`. `yield` + `wd` = `yiewd`. Right?
 
 The problem
 -----------
@@ -61,7 +63,10 @@ Isn't that awesome?
 How it works
 ------------
 
-Basically, you pass a generator to `wd.remote`. This generator receives a driver object. Now, anytime you would have had a callback, just yield the function. If anything would have been passed as an argument to the callback, you'll get it as the assignment to yield.
+Basically, you pass a generator to `wd.remote`. This generator receives
+a driver object. Now, anytime you would have had a callback, just yield the
+function. If anything would have been passed as an argument to the callback,
+you'll get it as the assignment to yield.
 
 It takes a slight change of thought, but it's so much better than callbacks.
 
