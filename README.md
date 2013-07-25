@@ -69,7 +69,7 @@ Enjoy!
 
 Requirements
 ------------
-* Node &gt= 0.11.3
+* Node &gt;= 0.11.3 (one with generators)
 * Make sure you start your test runner with the `--harmony` flag
 
 Tests
