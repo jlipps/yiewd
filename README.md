@@ -136,6 +136,7 @@ Requirements
 * Node &gt;= 0.11.3 (one with generators)
 * Make sure you start your test runner with the `--harmony` flag; this might
   be non-trivial but for mocha, see below.
+* For running tests: `npm install -g mocha`
 
 Run the Tests
 -----
