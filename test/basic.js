@@ -4,14 +4,14 @@
 var yiewd = require('../lib/yiewd.js')
   , Express = require('../node_modules/wd/test/common/express.js').Express
   , _ = require('underscore')
-  , should = require('should');
+  , should = require('should')
+  , baseUrl = 'http://127.0.0.1:8181/'
+  , caps = { browserName: 'chrome' };
 
 describe('yiewd', function() {
   // handle running test server
   var server = new Express();
-  var baseUrl = 'http://127.0.0.1:8181/'
   var driver = null;
-  var caps = { browserName: 'chrome' };
   var handles = [];
   before(function(done) {
     server.start();
