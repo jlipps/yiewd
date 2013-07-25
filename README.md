@@ -3,7 +3,8 @@ Yiewd
 
 Yiewd is a [Wd.js](https://github.com/admc/wd) wrapper that uses V8's new
 generators for cleaner code! It's called `yiewd` because it uses the new
-`yield` syntax with `wd`. `yield` + `wd` = `yiewd`. Amazing, right?
+`yield` syntax with `wd`. `yield` + `wd` = `yiewd`. Amazing, right? And a great
+way to exercise vowel pronunciation.
 
 The problem
 -----------
@@ -21,7 +22,7 @@ driver.init(desiredCaps, function(err, sessionId) {
       if (err) return postTest(err);
       el.click(function(err) {
         if (err) return postTest(err);
-        setTimeout(function() {
+        setTimeout(function() { // pause a bit
           driver.elementById("anotherThing", function(err, el2) {
             if (err) return postTest(err);
             el2.text(function(err, text) {
@@ -30,7 +31,7 @@ driver.init(desiredCaps, function(err, sessionId) {
               driver.quit(postTest);
             });
           });
-        }, 1500);
+        }, 1500); // what's this random number doing here? It goes with the pause!
       });
     });
   });
@@ -41,28 +42,7 @@ Yeah, that sucks. Look at that callback pyramid! Look at all those error checks!
 
 The solution
 ------------
-
 Let's all be a little more sane, shall we?
-
-```js
-var wd = require('yiewd');
-
-wd.remote(function*(driver) {
-  var sessionId, el, el2, text;
-  sessionId = yield driver.init(desiredCaps);
-  yield driver.get("http://mysite.com");
-  el = yield driver.elementById("someId");
-  yield el.click();
-  yield driver.sleep(1.5);
-  el2 = yield driver.elementById("anotherThing")
-  text = yield el2.text();
-  text.should.equal("What the text should be");
-  yield driver.quit();
-});
-```
-
-Isn't that awesome? If you don't like passing `driver` around, you can also
-make use of Javascript's awesome binding situation to be even more concise:
 
 ```js
 wd.remote(function*() {
@@ -79,22 +59,24 @@ wd.remote(function*() {
 });
 ```
 
+Isn't that awesome? Because of Javascript's "elegant" binding rules, we've even
+got all the driver methods proxied on `this`!
+
+
 How it works
 ------------
-
 Basically, you pass a generator to `wd.remote`. This generator receives
 a driver object. Now, anytime you would have had a callback, just yield the
 function. If anything would have been passed as an argument to the callback,
-you'll get it as the assignment to yield.
+you'll get it as the result of the assignment to yield.
 
-It takes a slight change of thought, but it's so much better than callbacks.
-
-Enjoy!
+It takes a slight change in how you think, but it's so much better than
+callbacks. Enjoy!
 
 Integrating with test suites
 ----------------------------
-
-It's relatively easy to break up bits of sessions between testcases and so on. Here's what a simple mocha test suite could look like:
+It's relatively easy to break up bits of sessions between testcases and so on.
+Here's what a simple mocha test suite could look like:
 
 ```js
 describe('my cool feature', function() {
@@ -104,13 +86,13 @@ describe('my cool feature', function() {
   before(function(done) {
     yiewd.remote(function*(d) {
       driver = d;
-      yield driver.init(desiredCaps);
+      yield this.init(desiredCaps);
       done();
     });
   });
   after(function(done) {
     driver.run(function*() {
-      yield driver.quit();
+      yield this.quit();
       done();
     });
   });
@@ -131,9 +113,10 @@ describe('my cool feature', function() {
 });
 ```
 
-Essentially, if you have a `driver` object originally passed into the generator
-argument to `yiewd.remote()`, you can use `driver.run()` and pass it another
-generator which will take over execution for the driver. Easy!
+Notice how you get a `driver` object passed into the generator
+argument to `yiewd.remote()`. You can hold onto this and later use
+`driver.run()` and pass it another generator which will take over execution for
+the driver. Easy!
 
 Integrating with Sauce Labs
 ---------------------------
@@ -152,6 +135,9 @@ yiewd.sauce(userName, accessKey, function*() {
   }
 });
 ```
+
+Probably the pass/fail reporting would be handled in some kind of global
+tearDown method, of course.
 
 Requirements
 ------------
