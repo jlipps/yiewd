@@ -49,9 +49,9 @@ wd.remote(function*(driver) {
   var sessionId, el, el2, text;
   sessionId = yield driver.init(desiredCaps);
   yield driver.get("http://mysite.com");
-  el = driver.elementById("someId");
+  el = yield driver.elementById("someId");
   yield el.click();
-  el2 = driver.elementById("anotherThing")
+  el2 = yield driver.elementById("anotherThing")
   text = yield el2.text();
   text.should.equal("What the text should be");
   yield driver.quit();
@@ -66,9 +66,9 @@ wd.remote(function*() {
   var sessionId, el, el2, text;
   sessionId = yield this.init(desiredCaps);
   yield this.get("http://mysite.com");
-  el = this.elementById("someId");
+  el = yield this.elementById("someId");
   yield el.click();
-  el2 = this.elementById("anotherThing")
+  el2 = yield this.elementById("anotherThing")
   text = yield el2.text();
   text.should.equal("What the text should be");
   yield this.quit();
