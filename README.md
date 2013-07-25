@@ -40,7 +40,7 @@ driver.init(desiredCaps, function(err, sessionId) {
 
 Yeah, that sucks. Look at that callback pyramid! Look at all those error checks!
 
-The solution
+The (generator-based) solution
 ------------
 Let's all be a little more sane, shall we?
 
