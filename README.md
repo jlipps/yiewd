@@ -6,6 +6,8 @@ generators for cleaner code! It's called `yiewd` because it uses the new
 `yield` syntax with `wd`. `yield` + `wd` = `yiewd`. Amazing, right? And a great
 way to exercise vowel pronunciation.
 
+Yiewd is made possible with the [monocle.js](https://github.com/jlipps/monocle-js) library, a port of @sah's [monocle](https://github.com/saucelabs/monocle) for Python.
+
 The problem
 -----------
 Let's say we want to write a webdriver test:
@@ -45,7 +47,7 @@ The (generator-based) solution
 Let's all be a little more sane, shall we?
 
 ```js
-wd.remote(function*() {
+wd.remote().run(function*() {
   var sessionId, el, el2, text;
   sessionId = yield this.init(desiredCaps);
   yield this.get("http://mysite.com");
@@ -59,19 +61,15 @@ wd.remote(function*() {
 });
 ```
 
-Isn't that awesome? Because of Javascript's "elegant" binding rules, we've even
-got all the driver methods proxied on `this`!
+Niiice.
 
 
 How it works
 ------------
-Basically, you pass a generator to `wd.remote`. This generator receives
-a driver object. Now, anytime you would have had a callback, just yield the
-function. If anything would have been passed as an argument to the callback,
-you'll get it as the result of the assignment to yield.
+Basically, you get a driver object as a result of the call to `wd.remote()`. You can use this driver object inside a monocle o-routine to `yield` to asynchronous function execution rather than using callbacks. And you'll get the result of the callback as the assignment to the yield expression!
 
 It takes a slight change in how you think, but it's so much better than
-callbacks. Enjoy!
+callbacks.
 
 Integrating with test suites
 ----------------------------
@@ -84,8 +82,8 @@ describe('my cool feature', function() {
 
   // global setUp, tearDown
   before(function(done) {
-    yiewd.remote(function*(d) {
-      driver = d;
+    driver = yiewd.remote();
+    driver.run(function*() {
       yield this.init(desiredCaps);
       done();
     });
@@ -113,17 +111,46 @@ describe('my cool feature', function() {
 });
 ```
 
-Notice how you get a `driver` object passed into the generator
-argument to `yiewd.remote()`. You can hold onto this and later use
-`driver.run()` and pass it another generator which will take over execution for
-the driver. Easy!
+Notice how you get a `driver` object from `yiewd.remote()`. You can hold onto
+this and later use `driver.run()` and pass it another generator which will take
+over execution for the driver. Easy!
+
+Composing functionality
+-----------------------
+Using monocle.js, you can compose your own custom automation behaviors:
+
+```js
+var o0 = require('monocle.js').o0;
+
+describe('my cool feature', function() {
+  var driver = null;  // driver object used across testcases
+
+  var flow1 = o0(function*() {
+    yield driver.get('http://mywebpage.com');
+    var firstLink = yield driver.elementByCss('a');
+    yield firstLink.click();
+  });
+
+  var flow2 = o0(function*() {
+    var textBox = yield driver.elementByCss('input[type=text]');
+    yield textBox.sendKeys("my text");
+    yield (yield driver.elementById('submit')).click();
+  });
+
+  it('should do some thing', function(done) {
+    yield flow1();
+    yield flow2();
+  });
+
+});
+```
 
 Integrating with Sauce Labs
 ---------------------------
 We've got some special sauce so you can sauce while you Sauce:
 
 ```js
-yiewd.sauce(userName, accessKey, function*() {
+yiewd.sauce(userName, accessKey).run(function*() {
   yield this.init(desiredCaps);
   yield this.get('http://saucelabs.com/guinea-pig/');
   try {
