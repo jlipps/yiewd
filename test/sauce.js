@@ -8,6 +8,9 @@ var yiewd = require('../lib/yiewd.js')
   , baseUrl = 'http://saucelabs.com/test/guinea-pig/'
   , userName = process.env.SAUCE_USERNAME
   , accessKey = process.env.SAUCE_ACCESS_KEY
+  , monocle = require("monocle.js")
+  , o0 = monocle.o0
+  , run = monocle.run
   , caps = {
       platform: 'Linux'
       , browserName: 'chrome'
@@ -22,8 +25,8 @@ describe('yiewd sauce support', function() {
     , password: accessKey
   });
   it('should only work for sauce tests', function(done) {
-    yiewd.remote(function*(d) {
-      driver = d;
+    driver = yiewd.remote();
+    run(function*(d) {
       yield driver.init({browserName: 'chrome'});
       var err = null;
       try {
@@ -39,7 +42,7 @@ describe('yiewd sauce support', function() {
   });
 
   it('should run a job on sauce', function(done) {
-    yiewd.sauce(userName, accessKey, function*() {
+    yiewd.sauce(userName, accessKey).run(function*() {
       yield this.init(caps);
       yield this.get(baseUrl);
       (yield this.title()).should.include("I am a page title");
@@ -49,7 +52,7 @@ describe('yiewd sauce support', function() {
   });
 
   it('should set passed status', function(done) {
-    yiewd.sauce(userName, accessKey, function*() {
+    yiewd.sauce(userName, accessKey).run(function*() {
       var sessId = yield this.init(caps);
       yield this.get(baseUrl);
       (yield this.title()).should.include("I am a page title");
@@ -64,7 +67,7 @@ describe('yiewd sauce support', function() {
   });
 
   it('should set failed status', function(done) {
-    yiewd.sauce(userName, accessKey, function*() {
+    yiewd.sauce(userName, accessKey).run(function*() {
       var sessId = yield this.init(caps);
       yield this.get(baseUrl);
       (yield this.title()).should.include("I am a page title");

@@ -6,9 +6,8 @@ var yiewd = require('../lib/yiewd.js')
   , _ = require('underscore')
   , should = require('should')
   , baseUrl = 'http://127.0.0.1:8181/'
-  , monocle = require("monocle")
+  , monocle = require("monocle.js")
   , o0 = monocle.o0
-  , oR = monocle.Return
   , run = monocle.run
   , caps = { browserName: 'chrome' };
 
@@ -135,7 +134,6 @@ describe('yiewd', function() {
       yield myFunc();
       yield myFunc2();
       yield myFunc();
-      console.log(title);
       (Date.now() - start).should.be.above(499);
       done();
     });
