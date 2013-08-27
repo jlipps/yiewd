@@ -140,6 +140,8 @@ describe('my cool feature', function() {
   it('should do some thing', function(done) {
     yield flow1();
     yield flow2();
+    yield flow1();
+    done();
   });
 
 });
