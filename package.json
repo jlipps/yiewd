@@ -25,6 +25,7 @@
     "lib": "./lib"
   },
   "dependencies": {
+    "monocle": "~0.0.2",
     "underscore": "~1.4.3",
     "wd": "~0.0.32",
     "saucelabs": "~0.0.7"

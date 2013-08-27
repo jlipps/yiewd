@@ -6,6 +6,10 @@ var yiewd = require('../lib/yiewd.js')
   , _ = require('underscore')
   , should = require('should')
   , baseUrl = 'http://127.0.0.1:8181/'
+  , monocle = require("monocle")
+  , o0 = monocle.o0
+  , oR = monocle.Return
+  , run = monocle.run
   , caps = { browserName: 'chrome' };
 
 describe('yiewd', function() {
@@ -23,7 +27,8 @@ describe('yiewd', function() {
   });
 
   it('should start a session', function(done) {
-    yiewd.remote(function*(d) {
+    run(function*() {
+      var d = yiewd.remote();
       driver = d;
       yield driver.init(caps);
       done();
@@ -31,7 +36,7 @@ describe('yiewd', function() {
   });
 
   it('should get session status', function(done) {
-    driver.run(function*() {
+    run(function*() {
       var status = yield driver.status();
       should.exist(status.build);
       done();
@@ -39,7 +44,7 @@ describe('yiewd', function() {
   });
 
   it('should get list of sessions', function(done) {
-    driver.run(function*() {
+    run(function*() {
       var sessions = yield driver.sessions();
       sessions.length.should.be.above(0);
       should.exist(sessions[0].id);
@@ -48,7 +53,7 @@ describe('yiewd', function() {
   });
 
   it('should get session caps', function(done) {
-    driver.run(function*() {
+    run(function*() {
       var sessionCaps = yield driver.sessionCapabilities();
       should.exist(sessionCaps.browserName);
       sessionCaps.browserName.should.equal('chrome');
@@ -57,7 +62,7 @@ describe('yiewd', function() {
   });
 
   it('should get a url, page title, and window handle', function(done) {
-    driver.run(function*() {
+    run(function*() {
       var testPage = baseUrl + 'test-page.html';
       yield driver.get(testPage);
       var title = yield driver.title();
@@ -71,21 +76,21 @@ describe('yiewd', function() {
 
   it('should open a new window', function(done) {
     var newWindow = baseUrl + 'window-test-page.html?window_num=2';
-    driver.run(function*() {
+    run(function*() {
       yield driver.newWindow(newWindow, 'window-2');
       done();
     });
   });
 
   it('should switch to a window', function(done) {
-    driver.run(function*() {
+    run(function*() {
       yield driver.window("window-2");
       done();
     });
   });
 
   it('should get the window name', function(done) {
-    driver.run(function*() {
+    run(function*() {
       var name = yield driver.windowName();
       name.should.equal("window-2");
       var handle = yield driver.windowHandle();
@@ -97,7 +102,7 @@ describe('yiewd', function() {
   });
 
   it('should get window handles', function(done) {
-    driver.run(function*() {
+    run(function*() {
       var wdHandles = yield driver.windowHandles();
       _.each(handles, function(handle, handleId) {
         wdHandles.should.include(handle);
@@ -107,42 +112,37 @@ describe('yiewd', function() {
   });
 
   it('should sleep', function(done) {
-    driver.run(function*() {
+    run(function*() {
       var begin = Date.now();
-      yield this.sleep(0.5);
+      yield driver.sleep(0.5);
       var end = Date.now();
       (end - begin).should.be.above(499);
       done();
     });
   });
 
-  it('should work with run bound to `this`', function(done) {
+  it('driver.run should bind methods to `this`', function(done) {
     driver.run(function*() {
-      (yield this.title()).should.equal('Test Page');
+      var title = yield this.title();
+      title.should.equal('Test Page');
       done();
     });
   });
 
   it('should stop a session', function(done) {
-    driver.run(function*() {
+    run(function*() {
       yield driver.quit();
       done();
     });
   });
 
-  it('should work with functions bound to `this`', function(done) {
-    yiewd.remote(function*() {
-      yield this.init(caps);
-      yield this.quit();
+  it('should work passing in host and port', function(done) {
+    run(function*() {
+      var d = yiewd.remote('localhost', 4444);
+      yield d.init(caps);
+      yield d.quit();
       done();
     });
   });
 
-  it('should work passing in host and port', function(done) {
-    yiewd.remote('localhost', 4444, function*() {
-      yield this.init(caps);
-      yield this.quit();
-      done();
-    });
-  });
 });
