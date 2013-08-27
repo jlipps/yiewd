@@ -121,6 +121,26 @@ describe('yiewd', function() {
     });
   });
 
+  it('should be able to compose methods', function(done) {
+    var title = '';
+    var start = Date.now();
+    var myFunc = o0(function*() {
+      title += yield driver.title();
+      yield driver.sleep(0.25);
+    });
+    var myFunc2 = o0(function*() {
+      title += ' foo ';
+    });
+    run(function*() {
+      yield myFunc();
+      yield myFunc2();
+      yield myFunc();
+      console.log(title);
+      (Date.now() - start).should.be.above(499);
+      done();
+    });
+  });
+
   it('driver.run should bind methods to `this`', function(done) {
     driver.run(function*() {
       var title = yield this.title();
