@@ -6,7 +6,10 @@ generators for cleaner code! It's called `yiewd` because it uses the new
 `yield` syntax with `wd`. `yield` + `wd` = `yiewd`. Amazing, right? And a great
 way to exercise vowel pronunciation.
 
-Yiewd is made possible with the [monocle.js](https://github.com/jlipps/monocle-js) library.
+Yiewd is made possible with the
+[monocle.js](https://github.com/jlipps/monocle-js) library.
+
+Install with: `npm install yiewd`
 
 The problem
 -----------
@@ -40,14 +43,18 @@ driver.init(desiredCaps, function(err, sessionId) {
 });
 ```
 
-Yeah, that sucks. Look at that callback pyramid! Look at all those error checks!
+Yeah, that sucks. Look at that callback pyramid! Look at all those repetitive
+error checks!
 
 The (generator-based) solution
 ------------
 Let's all be a little more sane, shall we?
 
 ```js
-wd.remote().run(function*() {
+var yiewd = require('yiewd')
+  , driver = yiewd.remote();
+
+driver.run(function*() {
   var sessionId, el, el2, text;
   sessionId = yield this.init(desiredCaps);
   yield this.get("http://mysite.com");
@@ -66,10 +73,15 @@ Niiice.
 
 How it works
 ------------
-Basically, you get a driver object as a result of the call to `wd.remote()`. You can use this driver object inside a monocle o-routine to `yield` to asynchronous function execution rather than using callbacks. And you'll get the result of the callback as the assignment to the yield expression!
+Basically, you get a driver object as a result of the call to `wd.remote()`.
+You can use this driver object inside a monocle o-routine to `yield` to
+asynchronous function execution rather than using callbacks. And you'll get the
+result of the callback as the assignment to the yield expression!
 
-It takes a slight change in how you think, but it's so much better than
-callbacks.
+Once you have a driver object, you can use `driver.run` as a way to kick off
+a series of commands inside a generator. Here you have access to the driver
+object as `this`, so you can do things like `yield
+this.get("http://mysite.com")`.
 
 Integrating with test suites
 ----------------------------
@@ -77,6 +89,8 @@ It's relatively easy to break up bits of sessions between testcases and so on.
 Here's what a simple mocha test suite could look like:
 
 ```js
+var yiewd = require('yiewd');
+
 describe('my cool feature', function() {
   var driver = null;  // driver object used across testcases
 
@@ -117,34 +131,36 @@ over execution for the driver. Easy!
 
 Composing functionality
 -----------------------
-Using monocle.js, you can compose your own custom automation behaviors:
+Using [monocle.js](https://github.com/jlipps/monocle-js), you can compose your
+own custom automation behaviors:
 
 ```js
-var o_O = require('monocle.js').o_O;
+var o_O = require('monocle.js').o_O
+  , yiewd = require('yiewd')
+  , driver = yiewd.remote();
+
+var flow1 = o_O(function*() {
+  yield driver.get('http://mywebpage.com');
+  var firstLink = yield driver.elementByCss('a');
+  yield firstLink.click();
+});
+
+var flow2 = o_O(function*() {
+  var textBox = yield driver.elementByCss('input[type=text]');
+  yield textBox.sendKeys("my text");
+  yield (yield driver.elementById('submit')).click();
+});
 
 describe('my cool feature', function() {
-  var driver = null;  // driver object used across testcases
-
-  var flow1 = o_O(function*() {
-    yield driver.get('http://mywebpage.com');
-    var firstLink = yield driver.elementByCss('a');
-    yield firstLink.click();
+  it('should do some things', function(done) {
+    driver.run(function*() {
+      yield this.init(desiredCaps);
+      yield flow1();
+      yield flow2();
+      yield flow1(); // reuse flow1
+      done();
+    });
   });
-
-  var flow2 = o_O(function*() {
-    var textBox = yield driver.elementByCss('input[type=text]');
-    yield textBox.sendKeys("my text");
-    yield (yield driver.elementById('submit')).click();
-  });
-
-  it('should do some thing', function(done) {
-    yield driver.init(desiredCaps);
-    yield flow1();
-    yield flow2();
-    yield flow1();
-    done();
-  });
-
 });
 ```
 
@@ -153,7 +169,10 @@ Integrating with Sauce Labs
 We've got some special sauce so you can sauce while you Sauce:
 
 ```js
-yiewd.sauce(userName, accessKey).run(function*() {
+var yiewd = require('yiewd')
+  , driver = yiewd.sauce(userName, accessKey);
+
+driver.run(function*() {
   yield this.init(desiredCaps);
   yield this.get('http://saucelabs.com/guinea-pig/');
   try {
