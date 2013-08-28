@@ -6,7 +6,7 @@ generators for cleaner code! It's called `yiewd` because it uses the new
 `yield` syntax with `wd`. `yield` + `wd` = `yiewd`. Amazing, right? And a great
 way to exercise vowel pronunciation.
 
-Yiewd is made possible with the [monocle.js](https://github.com/jlipps/monocle-js) library, a port of @sah's [monocle](https://github.com/saucelabs/monocle) for Python.
+Yiewd is made possible with the [monocle.js](https://github.com/jlipps/monocle-js) library.
 
 The problem
 -----------
@@ -120,18 +120,18 @@ Composing functionality
 Using monocle.js, you can compose your own custom automation behaviors:
 
 ```js
-var o0 = require('monocle.js').o0;
+var o_O = require('monocle.js').o_O;
 
 describe('my cool feature', function() {
   var driver = null;  // driver object used across testcases
 
-  var flow1 = o0(function*() {
+  var flow1 = o_O(function*() {
     yield driver.get('http://mywebpage.com');
     var firstLink = yield driver.elementByCss('a');
     yield firstLink.click();
   });
 
-  var flow2 = o0(function*() {
+  var flow2 = o_O(function*() {
     var textBox = yield driver.elementByCss('input[type=text]');
     yield textBox.sendKeys("my text");
     yield (yield driver.elementById('submit')).click();

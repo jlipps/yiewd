@@ -8,9 +8,7 @@ var yiewd = require('../lib/yiewd.js')
   , baseUrl = 'http://saucelabs.com/test/guinea-pig/'
   , userName = process.env.SAUCE_USERNAME
   , accessKey = process.env.SAUCE_ACCESS_KEY
-  , monocle = require("monocle.js")
-  , o0 = monocle.o0
-  , run = monocle.run
+  , run = require("monocle.js").run
   , caps = {
       platform: 'Linux'
       , browserName: 'chrome'
