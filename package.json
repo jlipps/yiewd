@@ -25,7 +25,7 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "monocle.js": "~0.0.4",
+    "monocle.js": "~0.1.0",
     "underscore": "~1.4.3",
     "wd": "~0.0.32",
     "saucelabs": "~0.0.7"
