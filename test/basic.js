@@ -110,6 +110,20 @@ describe('yiewd', function() {
     });
   });
 
+  it('should handle wd errors', function(done) {
+    driver.run(function*() {
+      var err;
+      try {
+        var text = yield this.alertText();
+      } catch(e) {
+        err = e;
+      }
+      should.exist(err);
+      err.message.should.include('27');
+      done();
+    });
+  });
+
   it('should sleep', function(done) {
     run(function*() {
       var begin = Date.now();
