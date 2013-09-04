@@ -6,7 +6,7 @@ var yiewd = require('../lib/yiewd.js')
   , _ = require('underscore')
   , should = require('should')
   , baseUrl = 'http://127.0.0.1:8181/'
-  , run = require("monocle.js").run
+  , run = require("monocle-js").run
   , caps = { browserName: 'chrome' };
 
 describe('yiewd elements', function() {

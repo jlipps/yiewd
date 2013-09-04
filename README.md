@@ -7,7 +7,7 @@ generators for cleaner code! It's called `yiewd` because it uses the new
 way to exercise vowel pronunciation.
 
 Yiewd is made possible with the
-[monocle.js](https://github.com/jlipps/monocle-js) library.
+[monocle-js](https://github.com/jlipps/monocle-js) library.
 
 Install with: `npm install yiewd`
 
@@ -131,11 +131,11 @@ over execution for the driver. Easy!
 
 Composing functionality
 -----------------------
-Using [monocle.js](https://github.com/jlipps/monocle-js), you can compose your
+Using [monocle-js](https://github.com/jlipps/monocle-js), you can compose your
 own custom automation behaviors:
 
 ```js
-var o_O = require('monocle.js').o_O
+var o_O = require('monocle-js').o_O
   , yiewd = require('yiewd')
   , driver = yiewd.remote();
 
