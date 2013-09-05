@@ -48,5 +48,15 @@ describe('yiewd elements', function() {
     });
   });
 
+  it('should work getting els from els', function(done) {
+    run(function*() {
+      var div = yield driver.elementById('click');
+      var anchor = yield div.elementByTagName('a');
+      var text = yield anchor.text();
+      text.should.equal("clicked");
+      done();
+    });
+  });
+
 });
 
