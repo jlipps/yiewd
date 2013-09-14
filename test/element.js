@@ -58,5 +58,19 @@ describe('yiewd elements', function() {
     });
   });
 
+  it('should defer findElement if requested', function(done) {
+    run(function*() {
+      // reset link state
+      yield driver.execute("jQuery(function() {\n" +
+        "$('#click a').html('not clicked');\n" +
+      "});");
+      yield driver.elementByCss("#click a").click();
+      (yield driver.elementByCss("#click a").text()).should.equal("clicked");
+      var anchor = yield driver.elementById('click').elementByTagName('a');
+      (yield anchor.text()).should.equal("clicked");
+      done();
+    });
+  });
+
 });
 

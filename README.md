@@ -58,11 +58,9 @@ driver.run(function*() {
   var sessionId, el, el2, text;
   sessionId = yield this.init(desiredCaps);
   yield this.get("http://mysite.com");
-  el = yield this.elementById("someId");
-  yield el.click();
+  yield this.elementById("someId").click();
   yield this.sleep(1.5);
-  el2 = yield this.elementById("anotherThing")
-  text = yield el2.text();
+  text = yield this.elementById("anotherThing").text();
   text.should.equal("What the text should be");
   yield this.quit();
 });
@@ -141,14 +139,12 @@ var o_O = require('monocle-js').o_O
 
 var flow1 = o_O(function*() {
   yield driver.get('http://mywebpage.com');
-  var firstLink = yield driver.elementByCss('a');
-  yield firstLink.click();
+  yield driver.elementByCss('a').click();
 });
 
 var flow2 = o_O(function*() {
-  var textBox = yield driver.elementByCss('input[type=text]');
-  yield textBox.sendKeys("my text");
-  yield (yield driver.elementById('submit')).click();
+  yield driver.elementByCss('input[type=text]').sendKeys("my text");
+  yield driver.elementById('submit').click();
 });
 
 describe('my cool feature', function() {
