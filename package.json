@@ -8,7 +8,7 @@
     "selenium",
     "wd"
   ],
-  "version": "0.0.16",
+  "version": "0.0.17",
   "author": "jlipps@gmail.com",
   "repository": {
     "type": "git",
@@ -25,21 +25,21 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "monocle-js": "~0.1.7",
-    "underscore": "~1.4.3",
-    "wd": "~0.1.2",
-    "saucelabs": "~0.0.7"
+    "monocle-js": "~0.2.0",
+    "underscore": "~1.5.2",
+    "wd": "~0.2.3",
+    "saucelabs": "~0.1.1"
   },
   "scripts": {
     "test": "grunt test"
   },
   "devDependencies": {
-    "express": "~3.3.4",
-    "mocha": "~1.8.1",
+    "express": "~3.4.4",
+    "mocha": "~1.14.0",
     "grunt": "~0.4.0",
     "grunt-cli": "~0.1.6",
-    "should": "~1.2.1",
-    "grunt-mocha-test": "~0.2.0",
-    "grunt-contrib-jshint": "~0.1.1"
+    "should": "~2.1.0",
+    "grunt-mocha-test": "~0.7.0",
+    "grunt-contrib-jshint": "~0.7.1"
   }
 }
