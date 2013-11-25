@@ -2,10 +2,10 @@
 "use strict";
 
 var yiewd = require('../lib/yiewd.js')
-  , Express = require('../node_modules/wd/test/common/express.js').Express
+  , Express = require('./server/express.js').Express
   , _ = require('underscore')
   , should = require('should')
-  , baseUrl = 'http://127.0.0.1:8181/'
+  , baseUrl = 'http://127.0.0.1:8181/test/'
   , monocle = require("monocle-js")
   , o0 = monocle.o0
   , run = monocle.run
@@ -22,7 +22,14 @@ describe('yiewd', function() {
   });
   after(function(done) {
     server.stop();
-    done();
+    if (driver !== null) {
+      driver.run(function*() {
+        yield this.quit();
+        done();
+      });
+    } else {
+      done();
+    }
   });
 
   it('should start a session', function(done) {
@@ -62,10 +69,10 @@ describe('yiewd', function() {
 
   it('should get a url, page title, and window handle', function(done) {
     run(function*() {
-      var testPage = baseUrl + 'test-page.html';
+      var testPage = baseUrl + 'guinea-pig.html';
       yield driver.get(testPage);
       var title = yield driver.title();
-      title.should.equal("TEST PAGE");
+      title.should.equal("I am a page title");
       var handle = yield driver.windowHandle();
       handle.length.should.be.above(0);
       handles['window-1'] = handle;
@@ -74,7 +81,7 @@ describe('yiewd', function() {
   });
 
   it('should open a new window', function(done) {
-    var newWindow = baseUrl + 'window-test-page.html?window_num=2';
+    var newWindow = baseUrl + 'guinea-pig2.html';
     run(function*() {
       yield driver.newWindow(newWindow, 'window-2');
       done();
@@ -156,7 +163,7 @@ describe('yiewd', function() {
   it('driver.run should bind methods to `this`', function(done) {
     driver.run(function*() {
       var title = yield this.title();
-      title.should.equal('Test Page');
+      title.should.equal('I am another page title');
       done();
     });
   });
@@ -164,6 +171,7 @@ describe('yiewd', function() {
   it('should stop a session', function(done) {
     run(function*() {
       yield driver.quit();
+      driver = null;
       done();
     });
   });

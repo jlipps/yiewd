@@ -2,10 +2,10 @@
 "use strict";
 
 var yiewd = require('../lib/yiewd.js')
-  , Express = require('../node_modules/wd/test/common/express.js').Express
+  , Express = require('./server/express.js').Express
   , _ = require('underscore')
   , should = require('should')
-  , baseUrl = 'http://127.0.0.1:8181/'
+  , baseUrl = 'http://127.0.0.1:8181/test/'
   , run = require("monocle-js").run
   , caps = { browserName: 'chrome' };
 
@@ -31,43 +31,34 @@ describe('yiewd elements', function() {
 
   it('should click and get text', function(done) {
     run(function*() {
-      yield driver.get(baseUrl + "element-test-page.html");
-      var anchor = yield driver.elementByCss("#click a");
-      yield driver.execute("jQuery(function() {\n" +
-        "var a = $('#click a');\n" +
-        "a.click(function() {\n" +
-          "a.html('clicked');\n" +
-          "return false;\n" +
-        "});\n" +
-      "});");
+      yield driver.get(baseUrl + "guinea-pig.html");
+      var anchor = yield driver.elementByLinkText("i am a link");
       var text = yield anchor.text();
-      (yield anchor.text()).should.equal("not clicked");
+      (yield anchor.text()).should.equal("i am a link");
       yield anchor.click();
-      (yield anchor.text()).should.equal("clicked");
+      (yield driver.title()).should.equal("I am another page title");
       done();
     });
   });
 
   it('should work getting els from els', function(done) {
     run(function*() {
-      var div = yield driver.elementById('click');
-      var anchor = yield div.elementByTagName('a');
-      var text = yield anchor.text();
-      text.should.equal("clicked");
+      yield driver.back();
+      var div = yield driver.elementById('the_forms_id');
+      var anchor = yield div.elementByTagName('p');
+      var input = yield anchor.elementByTagName('input');
+      var text = yield input.getAttribute('value');
+      text.should.equal("i has no focus");
       done();
     });
   });
 
   it('should defer findElement if requested', function(done) {
     run(function*() {
-      // reset link state
-      yield driver.execute("jQuery(function() {\n" +
-        "$('#click a').html('not clicked');\n" +
-      "});");
-      yield driver.elementByCss("#click a").click();
-      (yield driver.elementByCss("#click a").text()).should.equal("clicked");
-      var anchor = yield driver.elementById('click').elementByTagName('a');
-      (yield anchor.text()).should.equal("clicked");
+      yield driver.elementByLinkText("i am a link").click();
+      (yield driver.title()).should.equal("I am another page title");
+      yield driver.back();
+      (yield driver.elementByTagName('body').elementsById('the_forms_id')[0].elementByTagName('p').elementByTagName('input').getAttribute('value')).should.equal("i has no focus");
       done();
     });
   });
