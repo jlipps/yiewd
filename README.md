@@ -160,6 +160,33 @@ describe('my cool feature', function() {
 });
 ```
 
+Chaining driver calls
+---------------------
+Often in WebDriver-land, you only want to find an element in order to do
+something with it. In those cases, it's a bit tedious to do something like
+this:
+
+```js
+var el1 = yield driver.elementById('someEl');
+var text = yield el1.text();
+text.should.equal("hello world");
+```
+
+Of course, using Javascript&trade; we can already "chain" these calls:
+
+```js
+var text = yield (yield driver.elementById('someEl')).text();
+text.should.equal("hello world");
+```
+
+But we have this goofy double-yield business. So Yiewd lets you do away with
+it:
+
+```js
+var text = yield driver.elementById('someEl').text()
+text.should.equal("hello world");
+```
+
 Integrating with Sauce Labs
 ---------------------------
 We've got some special sauce so you can sauce while you Sauce:
