@@ -56,11 +56,9 @@ describe('yiewd sauce support', function() {
       (yield this.title()).should.include("I am a page title");
       yield this.reportPass();
       yield this.quit();
-      sauce.showJob(sessId, function(err, res) {
-        should.not.exist(err);
-        res.passed.should.equal(true);
-        done();
-      });
+      var jobInfo = yield this.sauceInfo();
+      jobInfo.passed.should.equal(true);
+      done();
     });
   });
 
@@ -71,11 +69,9 @@ describe('yiewd sauce support', function() {
       (yield this.title()).should.include("I am a page title");
       yield this.reportFail();
       yield this.quit();
-      sauce.showJob(sessId, function(err, res) {
-        should.not.exist(err);
-        res.passed.should.equal(false);
-        done();
-      });
+      var jobInfo = yield this.sauceInfo();
+      jobInfo.passed.should.equal(false);
+      done();
     });
   });
 
