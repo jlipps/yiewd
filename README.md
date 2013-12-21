@@ -205,6 +205,7 @@ driver.run(function*() {
   } catch (e) {
     yield this.reportFail();
   }
+  yield this.quit();
 });
 ```
 
