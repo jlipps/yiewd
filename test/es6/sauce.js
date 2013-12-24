@@ -1,7 +1,7 @@
 /*global describe:true, it:true, before:true, after:true */
 "use strict";
 
-var yiewd = require('../lib/yiewd.js')
+var yiewd = require('../../lib/main.js')
   , _ = require('underscore')
   , should = require('should')
   , SauceLabs = require('saucelabs')

@@ -214,9 +214,20 @@ tearDown method, of course.
 
 Requirements
 ------------
+Either:
 * Node &gt;= 0.11.3 (one with generators)
 * Make sure you start your test runner with the `--harmony` flag; this might
   be non-trivial but for mocha, see below.
+
+Or:
+* Any recent node
+* Run your test scripts through [regenerator](https://github.com/facebook/regenerator) to get generator support, e.g.:
+
+    ```bash
+    regenerator my_test.js > my_test_es5.js && mocha my_test_es5.js
+    ```
+
+And:
 * For running tests: `npm install -g mocha`
 
 Run the Tests

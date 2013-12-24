@@ -1,6 +1,6 @@
+build.sh
+
 lib-cov
-lib/es5
-test/es5
 *.seed
 *.log
 *.csv

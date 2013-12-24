@@ -1,9 +1,9 @@
 /*global describe:true, it:true, before:true, after:true */
 "use strict";
 
-var yiewd = require('../lib/yiewd.js')
-  , Express = require('./server/express.js').Express
-  , _ = require('underscore')
+var _ = require('underscore');
+var yiewd = require('../../lib/main.js')
+  , Express = require('../server/express.js').Express
   , should = require('should')
   , baseUrl = 'http://127.0.0.1:8181/test/'
   , monocle = require("monocle-js")

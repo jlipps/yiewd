@@ -1,12 +1,13 @@
 /*global describe:true, it:true, before:true, after:true */
 "use strict";
 
-var yiewd = require('../lib/yiewd.js')
-  , Express = require('./server/express.js').Express
+var yiewd = require('../../lib/main.js')
+  , Express = require('../server/express.js').Express
   , _ = require('underscore')
   , should = require('should')
   , baseUrl = 'http://127.0.0.1:8181/test/'
-  , run = require("monocle-js").run
+  , monocle = require('monocle-js')
+  , run = monocle.run
   , caps = { browserName: 'chrome' };
 
 describe('yiewd elements', function() {
@@ -53,15 +54,17 @@ describe('yiewd elements', function() {
     });
   });
 
-  it('should defer findElement if requested', function(done) {
-    run(function*() {
-      yield driver.elementByLinkText("i am a link").click();
-      (yield driver.title()).should.equal("I am another page title");
-      yield driver.back();
-      (yield driver.elementByTagName('body').elementsById('the_forms_id')[0].elementByTagName('p').elementByTagName('input').getAttribute('value')).should.equal("i has no focus");
-      done();
+  if (monocle.native) {
+    it('should defer findElement if requested', function(done) {
+      run(function*() {
+        yield driver.elementByLinkText("i am a link").click();
+        (yield driver.title()).should.equal("I am another page title");
+        yield driver.back();
+        (yield driver.elementByTagName('body').elementsById('the_forms_id')[0].elementByTagName('p').elementByTagName('input').getAttribute('value')).should.equal("i has no focus");
+        done();
+      });
     });
-  });
+  }
 
 });
 
