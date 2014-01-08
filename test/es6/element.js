@@ -57,10 +57,13 @@ describe('yiewd elements', function() {
   if (monocle.native) {
     it('should defer findElement if requested', function(done) {
       run(function*() {
+        yield driver.get(baseUrl + "guinea-pig.html");
         yield driver.elementByLinkText("i am a link").click();
         (yield driver.title()).should.equal("I am another page title");
         yield driver.back();
-        (yield driver.elementByTagName('body').elementsById('the_forms_id')[0].elementByTagName('p').elementByTagName('input').getAttribute('value')).should.equal("i has no focus");
+        var text = yield driver.elementByTagName('body').elementById('the_forms_id')
+          .elementByTagName('>','input').getValue();
+        text.should.equal("i has no focus");
         done();
       });
     });

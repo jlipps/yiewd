@@ -15,15 +15,17 @@ var yiewd = require('../../lib/main.js')
       , name: 'Yiewd test'
     };
 
+require('colors');
+
 describe('yiewd sauce support', function() {
   // handle running test server
-  var driver = null;
   var sauce = new SauceLabs({
     username: userName
     , password: accessKey
   });
+
   it('should only work for sauce tests', function(done) {
-    driver = yiewd.remote();
+    var driver = yiewd.remote();
     run(function*(d) {
       yield driver.init({browserName: 'chrome'});
       var err = null;
@@ -35,43 +37,57 @@ describe('yiewd sauce support', function() {
       yield driver.quit();
       should.exist(err);
       should.exist(err.message);
-      done();
+      done();        
     });
   });
+  
+  describe('on sauce', function() {
+    var browser;
 
-  it('should run a job on sauce', function(done) {
-    yiewd.sauce(userName, accessKey).run(function*() {
-      yield this.init(caps);
-      yield this.get(baseUrl);
-      (yield this.title()).should.include("I am a page title");
-      yield this.quit();
-      done();
+    before(function() {
+      browser = yiewd.sauce(userName, accessKey);
+      browser.on('status', function(info) {
+        console.log(info.cyan);
+      });
+      browser.on('command', function(meth, path, data) {
+        console.log(' > ' + meth.yellow, path.grey, data || '');
+      });
     });
-  });
 
-  it('should set passed status', function(done) {
-    yiewd.sauce(userName, accessKey).run(function*() {
-      var sessId = yield this.init(caps);
-      yield this.get(baseUrl);
-      (yield this.title()).should.include("I am a page title");
-      yield this.reportPass();
-      yield this.quit();
-      var jobInfo = yield this.sauceInfo();
-      jobInfo.passed.should.equal(true);
-      done();
+    it('should run a job on sauce', function(done) {
+      browser.run(function*() {
+        yield this.init(caps);
+        yield this.get(baseUrl);
+        (yield this.title()).should.include("I am a page title");
+        yield this.quit();
+        done();
+      });
     });
-  });
 
-  it('should set failed status', function(done) {
-    yiewd.sauce(userName, accessKey).run(function*() {
-      var sessId = yield this.init(caps);
-      yield this.get(baseUrl);
-      (yield this.title()).should.include("I am a page title");
-      yield this.reportFail();
-      yield this.quit();
-      var jobInfo = yield this.sauceInfo();
-      jobInfo.passed.should.equal(false);
-      done();
+    it('should set passed status', function(done) {
+      browser.run(function*() {
+        var sessId = yield this.init(caps);
+        yield this.get(baseUrl);
+        (yield this.title()).should.include("I am a page title");
+        yield this.reportPass();
+        yield this.quit();
+        var jobInfo = yield this.sauceInfo();
+        jobInfo.passed.should.equal(true);
+        done();
+      });
+    });
+
+    it('should set failed status', function(done) {
+      browser.run(function*() {
+        var sessId = yield this.init(caps);
+        yield this.get(baseUrl);
+        (yield this.title()).should.include("I am a page title");
+        yield this.reportFail();
+        yield this.quit();
+        var jobInfo = yield this.sauceInfo();
+        jobInfo.passed.should.equal(false);
+        done();
+      });
     });
   });
 

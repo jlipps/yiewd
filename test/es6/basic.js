@@ -20,6 +20,7 @@ describe('yiewd', function() {
     server.start();
     done();
   });
+  
   after(function(done) {
     server.stop();
     if (driver !== null) {
@@ -134,7 +135,7 @@ describe('yiewd', function() {
   it('should sleep', function(done) {
     run(function*() {
       var begin = Date.now();
-      yield driver.sleep(0.5);
+      yield driver.sleep(500);
       var end = Date.now();
       (end - begin).should.be.above(499);
       done();
@@ -146,7 +147,7 @@ describe('yiewd', function() {
     var start = Date.now();
     var myFunc = o0(function*() {
       title += yield driver.title();
-      yield driver.sleep(0.25);
+      yield driver.sleep(250);
     });
     var myFunc2 = o0(function*() {
       title += ' foo ';
