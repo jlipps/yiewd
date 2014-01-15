@@ -249,3 +249,7 @@ Contributing
 Give it a whirl and contribute bugfixes! Pull requests welcome. Biggest area of
 need right now is filling out our testsuite to make sure everything works
 correctly.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jlipps/yiewd/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
