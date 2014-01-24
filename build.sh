@@ -7,7 +7,6 @@ rm -rf ./lib/es5
 mkdir ./lib/es5
 echo "* Generating new es5 files"
 $regenerator ./lib/yiewd.js > ./lib/es5/yiewd.js
-cp ./lib/yiewd-element.js ./lib/es5/
 
 echo "* Removing old es5 test files"
 rm -rf ./test/es5
