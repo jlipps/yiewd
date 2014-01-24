@@ -20,6 +20,7 @@ describe('yiewd', function() {
     server.start();
     done();
   });
+  
   after(function(done) {
     server.stop();
     if (driver !== null) {
