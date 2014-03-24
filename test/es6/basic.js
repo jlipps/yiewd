@@ -20,7 +20,7 @@ describe('yiewd', function() {
     server.start();
     done();
   });
-  
+
   after(function(done) {
     server.stop();
     if (driver !== null) {
@@ -122,10 +122,24 @@ describe('yiewd', function() {
     driver.run(function*() {
       var err;
       try {
-        var text = yield this.alertText();
+        yield this.alertText();
       } catch(e) {
         err = e;
       }
+      should.exist(err);
+      err.message.should.include('27');
+      done();
+    });
+  });
+
+  it('should handle wd errors asynchronously', function(done) {
+    driver.run(function*() {
+      try {
+        yield this.alertText();
+      } catch (e) {
+        throw e;
+      }
+    }).nodeify(function (err) {
       should.exist(err);
       err.message.should.include('27');
       done();
