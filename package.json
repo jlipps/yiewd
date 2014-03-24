@@ -39,7 +39,7 @@
     "mocha": "~1.14.0",
     "grunt": "~0.4.0",
     "grunt-cli": "~0.1.6",
-    "should": "~2.1.0",
+    "should": "~3.2.0-beta1",
     "grunt-mocha-test": "~0.7.0",
     "grunt-contrib-jshint": "~0.7.1",
     "colors": "~0.6.2"

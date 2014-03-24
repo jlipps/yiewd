@@ -3,7 +3,6 @@
 
 var yiewd = require('../../lib/main.js')
   , Express = require('../server/express.js').Express
-  , _ = require('underscore')
   , should = require('should')
   , baseUrl = 'http://127.0.0.1:8181/test/'
   , monocle = require('monocle-js')
@@ -14,7 +13,6 @@ describe('yiewd elements', function() {
   // handle running test server
   var server = new Express();
   var driver = null;
-  var handles = [];
   before(function(done) {
     server.start();
     run(function*() {
@@ -34,7 +32,6 @@ describe('yiewd elements', function() {
     run(function*() {
       yield driver.get(baseUrl + "guinea-pig.html");
       var anchor = yield driver.elementByLinkText("i am a link");
-      var text = yield anchor.text();
       (yield anchor.text()).should.equal("i am a link");
       yield anchor.click();
       (yield driver.title()).should.equal("I am another page title");
@@ -50,6 +47,23 @@ describe('yiewd elements', function() {
       var input = yield anchor.elementByTagName('input');
       var text = yield input.getAttribute('value');
       text.should.equal("i has no focus");
+      done();
+    });
+  });
+
+  it('should fail when an element is not there', function(done) {
+    run(function*() {
+      var e;
+      try {
+        yield driver.elementById('donotexistman');
+      } catch (err) {
+        e = err;
+      }
+      e.message.should.include("7");
+      yield driver.elementByTagName("nowaydude");
+    }).nodeify(function(err) {
+      should.exist(err);
+      err.message.should.include("NoSuchElement");
       done();
     });
   });
