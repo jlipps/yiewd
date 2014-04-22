@@ -8,7 +8,7 @@
     "selenium",
     "wd"
   ],
-  "version": "0.4.6",
+  "version": "0.4.7",
   "author": "jlipps@gmail.com",
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "monocle-js": "~0.6.2",
+    "monocle-js": "~0.6.3",
     "underscore": "~1.5.2",
     "wd": "~0.2.19",
     "saucelabs": "~0.1.1"
