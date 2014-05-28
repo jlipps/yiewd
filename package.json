@@ -8,7 +8,7 @@
     "selenium",
     "wd"
   ],
-  "version": "0.4.9",
+  "version": "0.4.10",
   "author": "jlipps@gmail.com",
   "repository": {
     "type": "git",
@@ -25,16 +25,16 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "monocle-js": "~0.6.4",
+    "monocle-js": "~0.6.5",
     "underscore": "~1.5.2",
-    "wd": "~0.2.19",
+    "wd": "~0.2.21",
     "saucelabs": "~0.1.1"
   },
   "scripts": {
     "test": "grunt build && mocha --harmony -R spec -t 60000 test/es6/ && mocha -R spec -t 60000 test/es5/"
   },
   "devDependencies": {
-    "regenerator": "0.4.6",
+    "regenerator": "0.4.8",
     "express": "~3.4.4",
     "mocha": "~1.14.0",
     "grunt": "~0.4.0",
