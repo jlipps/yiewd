@@ -26,22 +26,22 @@
   },
   "dependencies": {
     "monocle-js": "~0.6.5",
-    "underscore": "~1.5.2",
-    "wd": "~0.2.21",
-    "saucelabs": "~0.1.1"
+    "saucelabs": "~0.1.1",
+    "underscore": "~1.6.0",
+    "wd": "~0.2.22"
   },
   "scripts": {
     "test": "grunt build && mocha --harmony -R spec -t 60000 test/es6/ && mocha -R spec -t 60000 test/es5/"
   },
   "devDependencies": {
+    "colors": "~0.6.2",
+    "express": "~4.3.2",
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-mocha-test": "~0.10.2",
+    "mocha": "~1.20.0",
     "regenerator": "0.4.8",
-    "express": "~3.4.4",
-    "mocha": "~1.14.0",
-    "grunt": "~0.4.0",
-    "grunt-cli": "~0.1.6",
-    "should": "~3.2.0-beta1",
-    "grunt-mocha-test": "~0.7.0",
-    "grunt-contrib-jshint": "~0.7.1",
-    "colors": "~0.6.2"
+    "should": "~3.3.2"
   }
 }
