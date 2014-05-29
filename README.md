@@ -235,7 +235,7 @@ Run the Tests
 Make sure you have your chromedriver-enabled Selenium server running, then:
 
 ```
-mocha -R spec -t 60000 --harmony test/
+mocha -R spec -t 60000 --harmony test/es6/
 ```
 
 Architecture
