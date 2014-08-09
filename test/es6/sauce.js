@@ -1,14 +1,12 @@
-/*global describe:true, it:true, before:true, after:true */
+/*global describe:true, it:true, before:true */
 "use strict";
 
 var yiewd = require('../../lib/main.js')
-  , _ = require('underscore')
   , should = require('should')
-  , SauceLabs = require('saucelabs')
   , baseUrl = 'http://saucelabs.com/test/guinea-pig/'
   , userName = process.env.SAUCE_USERNAME
   , accessKey = process.env.SAUCE_ACCESS_KEY
-  , run = require("monocle-js").run
+  , co = require("co")
   , caps = {
       platform: 'Linux'
       , browserName: 'chrome'
@@ -19,14 +17,10 @@ require('colors');
 
 describe('yiewd sauce support', function() {
   // handle running test server
-  var sauce = new SauceLabs({
-    username: userName
-    , password: accessKey
-  });
 
   it('should only work for sauce tests', function(done) {
     var driver = yiewd.remote();
-    run(function*(d) {
+    co(function*() {
       yield driver.init({browserName: 'chrome'});
       var err = null;
       try {
@@ -37,10 +31,9 @@ describe('yiewd sauce support', function() {
       yield driver.quit();
       should.exist(err);
       should.exist(err.message);
-      done();        
-    });
+    })(done);
   });
-  
+
   describe('on sauce', function() {
     var browser;
 
@@ -55,39 +48,36 @@ describe('yiewd sauce support', function() {
     });
 
     it('should run a job on sauce', function(done) {
-      browser.run(function*() {
+      browser.co(function*() {
         yield this.init(caps);
         yield this.get(baseUrl);
         (yield this.title()).should.include("I am a page title");
         yield this.quit();
-        done();
-      });
+      })(done);
     });
 
     it('should set passed status', function(done) {
-      browser.run(function*() {
-        var sessId = yield this.init(caps);
+      browser.co(function*() {
+        yield this.init(caps);
         yield this.get(baseUrl);
         (yield this.title()).should.include("I am a page title");
         yield this.reportPass();
         yield this.quit();
         var jobInfo = yield this.sauceInfo();
         jobInfo.passed.should.equal(true);
-        done();
-      });
+      })(done);
     });
 
     it('should set failed status', function(done) {
-      browser.run(function*() {
-        var sessId = yield this.init(caps);
+      browser.co(function*() {
+        yield this.init(caps);
         yield this.get(baseUrl);
         (yield this.title()).should.include("I am a page title");
         yield this.reportFail();
         yield this.quit();
         var jobInfo = yield this.sauceInfo();
         jobInfo.passed.should.equal(false);
-        done();
-      });
+      })(done);
     });
   });
 

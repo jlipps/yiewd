@@ -6,9 +6,8 @@ var yiewd = require('../../lib/main.js')
   , Express = require('../server/express.js').Express
   , should = require('should')
   , baseUrl = 'http://127.0.0.1:8181/test/'
-  , monocle = require("monocle-js")
-  , o0 = monocle.o0
-  , run = monocle.run
+  , native = require('../../lib/detect-harmony.js').generators
+  , co = require("co")
   , caps = { browserName: 'chrome' };
 
 describe('yiewd', function() {
@@ -24,52 +23,47 @@ describe('yiewd', function() {
   after(function(done) {
     server.stop();
     if (driver !== null) {
-      driver.run(function*() {
+      driver.co(function*() {
         yield this.quit();
-        done();
-      });
+      })(done);
     } else {
       done();
     }
   });
 
   it('should start a session', function(done) {
-    run(function*() {
+    co(function*() {
       var d = yiewd.remote();
       driver = d;
       yield driver.init(caps);
-      done();
-    });
+    })(done);
   });
 
   it('should get session status', function(done) {
-    run(function*() {
+    co(function*() {
       var status = yield driver.status();
       should.exist(status.build);
-      done();
-    });
+    })(done);
   });
 
   it('should get list of sessions', function(done) {
-    run(function*() {
+    co(function*() {
       var sessions = yield driver.sessions();
       sessions.length.should.be.above(0);
       should.exist(sessions[0].id);
-      done();
-    });
+    })(done);
   });
 
   it('should get session caps', function(done) {
-    run(function*() {
+    co(function*() {
       var sessionCaps = yield driver.sessionCapabilities();
       should.exist(sessionCaps.browserName);
       sessionCaps.browserName.should.equal('chrome');
-      done();
-    });
+    })(done);
   });
 
   it('should get a url, page title, and window handle', function(done) {
-    run(function*() {
+    co(function*() {
       var testPage = baseUrl + 'guinea-pig.html';
       yield driver.get(testPage);
       var title = yield driver.title();
@@ -77,69 +71,67 @@ describe('yiewd', function() {
       var handle = yield driver.windowHandle();
       handle.length.should.be.above(0);
       handles['window-1'] = handle;
-      done();
-    });
+    })(done);
   });
 
   it('should open a new window', function(done) {
     var newWindow = baseUrl + 'guinea-pig2.html';
-    run(function*() {
+    co(function*() {
       yield driver.newWindow(newWindow, 'window-2');
-      done();
-    });
+    })(done);
   });
 
   it('should switch to a window', function(done) {
-    run(function*() {
+    co(function*() {
       yield driver.window("window-2");
-      done();
-    });
+    })(done);
   });
 
   it('should get the window name', function(done) {
-    run(function*() {
+    co(function*() {
       var name = yield driver.windowName();
       name.should.equal("window-2");
       var handle = yield driver.windowHandle();
       handle.length.should.be.above(0);
       handle.should.not.eql(handles['window-1']);
       handles['window-2'] = handle;
-      done();
-    });
+    })(done);
   });
 
   it('should get window handles', function(done) {
-    run(function*() {
+    co(function*() {
       var wdHandles = yield driver.windowHandles();
-      _.each(handles, function(handle, handleId) {
+      _.each(handles, function(handle) {
         wdHandles.should.include(handle);
       });
-      done();
-    });
+    })(done);
   });
 
   it('should handle wd errors', function(done) {
-    driver.run(function*() {
+    co(function*() {
       var err;
       try {
-        yield this.alertText();
+        console.log(1);
+        yield driver.alertText();
+        console.log(2);
       } catch(e) {
+        console.log(3);
         err = e;
       }
+      console.log(err);
       should.exist(err);
       err.message.should.include('27');
-      done();
-    });
+    })(done);
   });
 
   it('should handle wd errors asynchronously', function(done) {
-    driver.run(function*() {
+    co(function*() {
       try {
-        yield this.alertText();
+        yield driver.alertText();
       } catch (e) {
         throw e;
       }
-    }).nodeify(function (err) {
+    })(function (err) {
       should.exist(err);
       err.message.should.include('27');
       done();
@@ -147,57 +139,55 @@ describe('yiewd', function() {
   });
 
   it('should sleep', function(done) {
-    run(function*() {
+    co(function*() {
       var begin = Date.now();
       yield driver.sleep(500);
       var end = Date.now();
       (end - begin).should.be.above(499);
-      done();
-    });
+    })(done);
   });
 
   it('should be able to compose methods', function(done) {
     var title = '';
     var start = Date.now();
-    var myFunc = o0(function*() {
+    var myFunc = function*() {
       title += yield driver.title();
       yield driver.sleep(250);
-    });
-    var myFunc2 = o0(function*() {
+    };
+    var myFunc2 = function*() {
       title += ' foo ';
-    });
-    run(function*() {
+      yield driver.sleep(1);
+    };
+    co(function*() {
       yield myFunc();
       yield myFunc2();
       yield myFunc();
       (Date.now() - start).should.be.above(499);
-      done();
-    });
+    })(done);
   });
 
-  it('driver.run should bind methods to `this`', function(done) {
-    driver.run(function*() {
-      var title = yield this.title();
-      title.should.equal('I am another page title');
-      done();
+  if (native) {
+    it('driver.co should bind methods to `this`', function(done) {
+      driver.co(function*() {
+        var title = yield this.title();
+        title.should.equal('I am another page title');
+      })(done);
     });
-  });
+  }
 
   it('should stop a session', function(done) {
-    run(function*() {
+    co(function*() {
       yield driver.quit();
       driver = null;
-      done();
-    });
+    })(done);
   });
 
   it('should work passing in host and port', function(done) {
-    run(function*() {
+    co(function*() {
       var d = yiewd.remote('localhost', 4444);
       yield d.init(caps);
       yield d.quit();
-      done();
-    });
+    })(done);
   });
 
 });

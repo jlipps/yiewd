@@ -26,9 +26,10 @@
   },
   "dependencies": {
     "monocle-js": "~0.6.5",
+    "co": "~3.1.0",
     "saucelabs": "~0.1.1",
     "underscore": "~1.6.0",
-    "wd": "~0.2.22"
+    "wd": "~0.2.27"
   },
   "scripts": {
     "test": "grunt build && mocha --harmony -R spec -t 60000 test/es6/ && mocha -R spec -t 60000 test/es5/"
@@ -41,7 +42,7 @@
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-mocha-test": "~0.10.2",
     "mocha": "~1.20.0",
-    "regenerator": "0.4.8",
+    "regenerator": "0.4.12",
     "should": "~3.3.2"
   }
 }
