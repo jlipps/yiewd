@@ -25,13 +25,13 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "monocle-js": "~0.6.5",
+    "monocle-js": "~1.0.0",
     "saucelabs": "~0.1.1",
     "underscore": "~1.6.0",
     "wd": "~0.2.22"
   },
   "scripts": {
-    "test": "grunt build && mocha --harmony -R spec -t 60000 test/es6/ && mocha -R spec -t 60000 test/es5/"
+    "test": "./build.sh && mocha --harmony -R spec -t 60000 test/es6/ && mocha -R spec -t 60000 test/es5/"
   },
   "devDependencies": {
     "colors": "~0.6.2",
@@ -41,7 +41,7 @@
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-mocha-test": "~0.10.2",
     "mocha": "~1.20.0",
-    "regenerator": "0.4.8",
+    "regenerator": "0.4.12",
     "should": "~3.3.2"
   }
 }
