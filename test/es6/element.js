@@ -5,54 +5,44 @@ var yiewd = require('../../lib/main.js')
   , Express = require('../server/express.js').Express
   , should = require('should')
   , baseUrl = 'http://127.0.0.1:8181/test/'
-  , monocle = require('monocle-js')
-  , run = monocle.run
+  , mo_Ocha = require("mo_ocha")
   , caps = { browserName: 'chrome' };
+
+var origIt = GLOBAL.it;
+mo_Ocha.rewrite();
 
 describe('yiewd elements', function() {
   // handle running test server
   var server = new Express();
   var driver = null;
-  before(function(done) {
+  before(function*() {
     server.start();
-    run(function*() {
-      driver = yiewd.remote();
-      yield driver.init(caps);
-      done();
-    });
+    driver = yiewd.remote();
+    yield driver.init(caps);
   });
-  after(function(done) {
-    run(function*() {
-      yield driver.quit();
-      done();
-    });
+  after(function*() {
+    yield driver.quit();
   });
 
-  it('should click and get text', function(done) {
-    run(function*() {
-      yield driver.get(baseUrl + "guinea-pig.html");
-      var anchor = yield driver.elementByLinkText("i am a link");
-      (yield anchor.text()).should.equal("i am a link");
-      yield anchor.click();
-      (yield driver.title()).should.equal("I am another page title");
-      done();
-    });
+  it('should click and get text', function*() {
+    yield driver.get(baseUrl + "guinea-pig.html");
+    var anchor = yield driver.elementByLinkText("i am a link");
+    (yield anchor.text()).should.equal("i am a link");
+    yield anchor.click();
+    (yield driver.title()).should.equal("I am another page title");
   });
 
-  it('should work getting els from els', function(done) {
-    run(function*() {
-      yield driver.back();
-      var div = yield driver.elementById('the_forms_id');
-      var anchor = yield div.elementByTagName('p');
-      var input = yield anchor.elementByTagName('input');
-      var text = yield input.getAttribute('value');
-      text.should.equal("i has no focus");
-      done();
-    });
+  it('should work getting els from els', function*() {
+    yield driver.back();
+    var div = yield driver.elementById('the_forms_id');
+    var anchor = yield div.elementByTagName('p');
+    var input = yield anchor.elementByTagName('input');
+    var text = yield input.getAttribute('value');
+    text.should.equal("i has no focus");
   });
 
-  it('should fail when an element is not there', function(done) {
-    run(function*() {
+  origIt('should fail when an element is not there', function(done) {
+    driver.run(function*() {
       var e;
       try {
         yield driver.elementById('donotexistman');
@@ -68,17 +58,14 @@ describe('yiewd elements', function() {
     });
   });
 
-  it('should defer findElement if requested', function(done) {
-    run(function*() {
-      yield driver.get(baseUrl + "guinea-pig.html");
-      yield driver.elementByLinkText("i am a link").click();
-      (yield driver.title()).should.equal("I am another page title");
-      yield driver.back();
-      var text = yield driver.elementByTagName('body').elementById('the_forms_id')
-        .elementByTagName('input').getValue();
-      text.should.equal("i has no focus");
-      done();
-    });
+  it('should defer findElement if requested', function*() {
+    yield driver.get(baseUrl + "guinea-pig.html");
+    yield driver.elementByLinkText("i am a link").click();
+    (yield driver.title()).should.equal("I am another page title");
+    yield driver.back();
+    var text = yield driver.elementByTagName('body').elementById('the_forms_id')
+      .elementByTagName('input').getValue();
+    text.should.equal("i has no focus");
   });
 
 });
