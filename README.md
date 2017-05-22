@@ -1,6 +1,8 @@
 Yiewd
 =====
 
+> **DEPRECATION NOTICE**: This package is no longer necessary. Use wd's promise-based driver (or another promise-based driver) and Node's built-in `async/await` functionality instead. README and code left intact below for posterity.
+
 Yiewd is a [Wd.js](https://github.com/admc/wd) wrapper that uses V8's new
 generators for cleaner code! It's called `yiewd` because it uses the new
 `yield` syntax with `wd`. `yield` + `wd` = `yiewd`. Amazing, right? And a great
